@@ -1,26 +1,412 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+/* ─── STRATTON SECURITY GROUP — DESIGN SYSTEM ─────────────────────────────── */
+
+@theme {
+  /* Fonts */
+  --font-display: var(--font-barlow-sc), "Barlow Semi Condensed", sans-serif;
+  --font-sans: var(--font-ibm-plex), "IBM Plex Sans", sans-serif;
+  --font-barlow: var(--font-barlow-reg), "Barlow", sans-serif;
+
+  /* Command Center Navy Palette */
+  --color-navy-950: #040c1a;
+  --color-navy-900: #06101e;
+  --color-navy-800: #0b1a2e;
+  --color-navy-700: #0f2040;
+  --color-navy-600: #152b52;
+  --color-navy-500: #1e3d6e;
+  --color-navy-400: #2e5594;
+  --color-navy-300: #4a78c0;
+
+  /* Steel / Slate */
+  --color-steel-900: #1e2d3d;
+  --color-steel-800: #283c51;
+  --color-steel-700: #355068;
+  --color-steel-600: #44667e;
+  --color-steel-500: #587a94;
+  --color-steel-400: #7a9ab8;
+  --color-steel-300: #9fb5cb;
+  --color-steel-200: #bfcfde;
+  --color-steel-100: #d8e4ef;
+
+  /* Tactical Gold */
+  --color-gold-700: #7a5a10;
+  --color-gold-600: #a07818;
+  --color-gold-500: #c49a2a;
+  --color-gold-400: #e0b84a;
+  --color-gold-300: #edcc70;
+  --color-gold-200: #f5df9e;
+
+  /* Authority Blue (CTA) */
+  --color-blue-700: #0e2ea8;
+  --color-blue-600: #1440d0;
+  --color-blue-500: #1b52ee;
+  --color-blue-400: #3f6ef5;
+  --color-blue-300: #6a93f8;
+
+  /* Status */
+  --color-success: #10b981;
+  --color-warning: #f59e0b;
+  --color-alert: #ef4444;
+
+  /* Text Scale */
+  --color-text-100: #edf2f7;
+  --color-text-200: #ccdae8;
+  --color-text-300: #9fb9d1;
+  --color-text-400: #7a9ab8;
+  --color-text-600: #4a6880;
+  --color-text-800: #2a3d50;
+
+  /* Semantic tokens */
+  --color-background: var(--color-navy-900);
+  --color-surface: var(--color-navy-800);
+  --color-surface-raised: var(--color-navy-700);
+  --color-border: #1a3050;
+  --color-border-emphasis: #1e4878;
+
+  /* Spacing scale (extends Tailwind default) */
+  --spacing-18: 4.5rem;
+  --spacing-22: 5.5rem;
+  --spacing-26: 6.5rem;
+  --spacing-30: 7.5rem;
+  --spacing-34: 8.5rem;
+  --spacing-38: 9.5rem;
+  --spacing-42: 10.5rem;
+  --spacing-128: 32rem;
+  --spacing-144: 36rem;
+  --spacing-160: 40rem;
+
+  /* Animation */
+  --animate-fade-up: fade-up 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+  --animate-fade-in: fade-in 0.5s ease both;
+  --animate-slide-in: slide-in 0.5s cubic-bezier(0.22, 1, 0.36, 1) both;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+/* ─── KEYFRAMES ─────────────────────────────────────────────────────────────── */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+@keyframes fade-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
+@keyframes fade-in {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+@keyframes slide-in {
+  from {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes pulse-gold {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.6; }
+}
+
+@keyframes count-up {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ─── BASE ───────────────────────────────────────────────────────────────────── */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background-color: var(--color-navy-900);
+  color: var(--color-text-100);
+  font-family: var(--font-sans);
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Reduced motion safety */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* Focus states */
+:focus-visible {
+  outline: 2px solid var(--color-gold-400);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+/* Selection */
+::selection {
+  background: color-mix(in srgb, var(--color-gold-500) 30%, transparent);
+  color: var(--color-text-100);
+}
+
+/* Scrollbar (webkit) */
+::-webkit-scrollbar {
+  width: 8px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-navy-800);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-steel-700);
+  border-radius: 4px;
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--color-steel-500);
+}
+
+/* ─── TYPOGRAPHY UTILITIES ───────────────────────────────────────────────────── */
+
+@utility display-hero {
+  font-family: var(--font-display);
+  font-weight: 800;
+  letter-spacing: -0.02em;
+  line-height: 0.9;
+  text-transform: uppercase;
+}
+
+@utility display-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+  line-height: 1;
+  text-transform: uppercase;
+}
+
+@utility label-overline {
+  font-family: var(--font-sans);
+  font-size: 0.6875rem;
+  font-weight: 600;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--color-gold-400);
+}
+
+@utility section-grid {
+  display: grid;
+  grid-template-columns: repeat(12, minmax(0, 1fr));
+  gap: 1.5rem;
+}
+
+/* ─── COMPONENT BASE STYLES ──────────────────────────────────────────────────── */
+
+@utility btn-primary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: var(--color-gold-500);
+  color: var(--color-navy-900);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--color-gold-400);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@utility btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 0.875rem 1.75rem;
+  background: transparent;
+  color: var(--color-text-100);
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: 1px solid color-mix(in srgb, var(--color-text-100) 30%, transparent);
+  border-radius: 2px;
+  cursor: pointer;
+  transition: border-color 0.2s ease, background 0.2s ease, transform 0.15s ease;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    border-color: var(--color-text-100);
+    background: color-mix(in srgb, var(--color-text-100) 8%, transparent);
+    transform: translateY(-1px);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+@utility btn-cta {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  padding: 1rem 2rem;
+  background: var(--color-blue-500);
+  color: white;
+  font-family: var(--font-sans);
+  font-size: 0.875rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 2px;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.15s ease, box-shadow 0.2s ease;
+  text-decoration: none;
+  white-space: nowrap;
+
+  &:hover {
+    background: var(--color-blue-600);
+    transform: translateY(-1px);
+    box-shadow: 0 8px 24px color-mix(in srgb, var(--color-blue-500) 30%, transparent);
+  }
+
+  &:active {
+    transform: translateY(0);
+  }
+}
+
+/* ─── CARD COMPONENT ─────────────────────────────────────────────────────────── */
+
+@utility card-dark {
+  background: var(--color-navy-800);
+  border: 1px solid var(--color-border);
+  border-radius: 2px;
+  transition: border-color 0.2s ease, transform 0.2s ease, box-shadow 0.2s ease;
+
+  &:hover {
+    border-color: var(--color-border-emphasis);
+    transform: translateY(-2px);
+    box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
+  }
+}
+
+/* ─── SECTION CONTAINERS ─────────────────────────────────────────────────────── */
+
+@utility section-padding {
+  padding-block: 5rem;
+
+  @media (min-width: 768px) {
+    padding-block: 7rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-block: 9rem;
+  }
+}
+
+@utility container-wide {
+  width: 100%;
+  max-width: 1440px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: 4rem;
+  }
+
+  @media (min-width: 1280px) {
+    padding-inline: 6rem;
+  }
+}
+
+@utility container-default {
+  width: 100%;
+  max-width: 1200px;
+  margin-inline: auto;
+  padding-inline: 1.5rem;
+
+  @media (min-width: 640px) {
+    padding-inline: 2rem;
+  }
+
+  @media (min-width: 1024px) {
+    padding-inline: 3rem;
+  }
+}
+
+/* ─── GOLD ACCENT LINE ───────────────────────────────────────────────────────── */
+
+@utility gold-line {
+  display: block;
+  width: 3rem;
+  height: 2px;
+  background: var(--color-gold-500);
+}
+
+/* ─── GRADIENT TEXT ──────────────────────────────────────────────────────────── */
+
+@utility gradient-gold {
+  background: linear-gradient(135deg, var(--color-gold-400), var(--color-gold-200));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+/* ─── NOISE TEXTURE OVERLAY ──────────────────────────────────────────────────── */
+
+@utility noise-overlay {
+  position: relative;
+
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
+    opacity: 0.04;
+    pointer-events: none;
+    border-radius: inherit;
+  }
 }

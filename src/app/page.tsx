@@ -1,65 +1,91 @@
-import Image from "next/image";
+import Navigation from "@/components/layout/Navigation";
+import Footer from "@/components/layout/Footer";
+import HeroSection from "@/components/home/HeroSection";
+import TrustBar from "@/components/home/TrustBar";
+import ClientLogosSection from "@/components/home/ClientLogosSection";
+import ServicesSection from "@/components/home/ServicesSection";
+import WhyStratton from "@/components/home/WhyStratton";
+import MidPageCTA from "@/components/home/MidPageCTA";
+import StatsSection from "@/components/home/StatsSection";
+import IndustriesSection from "@/components/home/IndustriesSection";
+import TestimonialsSection from "@/components/home/TestimonialsSection";
+import ValuesSection from "@/components/home/ValuesSection";
+import CTASection from "@/components/home/CTASection";
+import { SITE_CONFIG } from "@/lib/constants";
+import type { Metadata } from "next";
 
-export default function Home() {
+export const metadata: Metadata = {
+  alternates: { canonical: "/" },
+  title: "Stratton Security Group | Professional Security Services — Los Angeles",
+  description:
+    `Stratton Security Group delivers professional patrol, guard, and security management services across Los Angeles and Southern California. CA PPO #${SITE_CONFIG.licenseNumber}. 24/7 availability.`,
+  keywords: [
+    "security services Los Angeles",
+    "private security company Los Angeles",
+    "patrol services LA",
+    "commercial security Los Angeles",
+    "residential security California",
+    "security guard company",
+    "Stratton Security Group",
+    "PPO security company California",
+  ],
+  openGraph: {
+    title: "Stratton Security Group | Excellence In Protection",
+    description:
+      "Professional security services protecting businesses, communities, and assets across Los Angeles and Southern California. 24/7/365.",
+    type: "website",
+  },
+};
+
+export default function HomePage() {
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
-        </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
+    <>
+      {/* Skip to main content for accessibility */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[100] focus:px-4 focus:py-2 focus:bg-[#c49a2a] focus:text-[#06101e] focus:text-sm focus:font-600"
+      >
+        Skip to main content
+      </a>
+
+      <Navigation />
+
+      <main id="main-content">
+        {/* 1. Cinematic hero with video */}
+        <HeroSection />
+
+        {/* 2. Immediate trust indicators */}
+        <TrustBar />
+
+        {/* 3. Client logos / trusted by */}
+        <ClientLogosSection />
+
+        {/* 4. Services overview */}
+        <ServicesSection />
+
+        {/* 4. Stats/social proof numbers */}
+        <StatsSection />
+
+        {/* 5. Why Stratton — differentiators */}
+        <WhyStratton />
+
+        {/* 6. Mid-page CTA strip */}
+        <MidPageCTA />
+
+        {/* 7. Industries served */}
+        <IndustriesSection />
+
+        {/* 7. Values, mission, certifications */}
+        <ValuesSection />
+
+        {/* 8. Testimonials + Bark reviews */}
+        <TestimonialsSection />
+
+        {/* 9. Final CTA */}
+        <CTASection />
       </main>
-    </div>
+
+      <Footer />
+    </>
   );
 }
