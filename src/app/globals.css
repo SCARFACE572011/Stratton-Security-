@@ -380,34 +380,14 @@ body {
   width: 100%;
   max-width: 1440px;
   margin-inline: auto;
-  padding-inline: 1.5rem;
-
-  @media (min-width: 640px) {
-    padding-inline: 2rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding-inline: 4rem;
-  }
-
-  @media (min-width: 1280px) {
-    padding-inline: 6rem;
-  }
+  padding-inline: clamp(1.5rem, 8vw, 10rem);
 }
 
 @utility container-default {
   width: 100%;
   max-width: 1200px;
   margin-inline: auto;
-  padding-inline: 1.5rem;
-
-  @media (min-width: 640px) {
-    padding-inline: 2rem;
-  }
-
-  @media (min-width: 1024px) {
-    padding-inline: 3rem;
-  }
+  padding-inline: clamp(1.5rem, 6vw, 6rem);
 }
 
 /* ─── GOLD ACCENT LINE ───────────────────────────────────────────────────────── */

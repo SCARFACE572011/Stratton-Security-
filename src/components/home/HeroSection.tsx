@@ -122,6 +122,7 @@ export default function HeroSection() {
 
       {/* Content */}
       <div className="relative z-10 container-wide pb-24 md:pb-32 pt-40">
+        <div className="max-w-4xl">
         <motion.p
           initial={prefersReduced ? {} : { opacity: 0, x: -12 }}
           animate={{ opacity: 1, x: 0 }}
@@ -243,6 +244,7 @@ export default function HeroSection() {
             {SITE_CONFIG.phone}
           </a>
         </motion.div>
+        </div>
       </div>
     </section>
   );
