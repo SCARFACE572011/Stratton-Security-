@@ -120,8 +120,11 @@ export default function HeroSection() {
         <div className="w-px h-12 bg-gradient-to-t from-transparent to-[#1a2030]" />
       </motion.div>
 
-      {/* Content */}
-      <div className="relative z-10 container-wide pb-24 md:pb-32 pt-40">
+      {/* Content — inline padding guarantees it renders regardless of CSS utility issues */}
+      <div
+        className="relative z-10 pb-24 md:pb-32 pt-40 w-full max-w-[1440px] mx-auto"
+        style={{ paddingLeft: "clamp(2rem, 10vw, 14rem)", paddingRight: "clamp(2rem, 10vw, 14rem)" }}
+      >
         <div className="max-w-4xl">
         <motion.p
           initial={prefersReduced ? {} : { opacity: 0, x: -12 }}
