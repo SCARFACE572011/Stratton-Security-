@@ -108,13 +108,13 @@ export default function Navigation() {
                       href={item.href}
                       className={cn(
                         "px-3.5 py-2 text-[0.8125rem] font-medium tracking-wide transition-colors uppercase block relative",
-                        isActive(item.href) ? "text-white" : "text-[#c8d4e0] hover:text-white"
+                        isActive(item.href) ? "text-white" : "text-[#c8d4e0] hover:text-[#cc1111]"
                       )}
                       aria-current={isActive(item.href) ? "page" : undefined}
                     >
                       {item.label}
                       {isActive(item.href) && (
-                        <span className="absolute bottom-0 left-3.5 right-3.5 h-px bg-[#c49a2a]" />
+                        <span className="absolute bottom-0 left-3.5 right-3.5 h-px bg-[#cc1111]" />
                       )}
                     </Link>
                   )}

@@ -37,6 +37,13 @@
   --color-gold-300: #edcc70;
   --color-gold-200: #f5df9e;
 
+  /* Danger Red */
+  --color-danger-900: #450a0a;
+  --color-danger-700: #7f1d1d;
+  --color-danger-500: #cc1111;
+  --color-danger-400: #ef4444;
+  --color-danger-300: #f87171;
+
   /* Authority Blue (CTA) */
   --color-blue-700: #0e2ea8;
   --color-blue-600: #1440d0;
@@ -137,6 +144,16 @@
   90%, 94%, 96% { opacity: 0.35; }
 }
 
+@keyframes pulse-red {
+  0%, 100% { opacity: 1; box-shadow: 0 0 4px #cc1111, 0 0 12px rgba(204,17,17,0.4); }
+  50% { opacity: 0.4; box-shadow: 0 0 8px #cc1111, 0 0 24px rgba(204,17,17,0.2); }
+}
+
+@keyframes glow-red {
+  0%, 100% { box-shadow: 0 0 20px rgba(204,17,17,0.0); }
+  50% { box-shadow: 0 0 40px rgba(204,17,17,0.15), 0 0 80px rgba(204,17,17,0.06); }
+}
+
 /* ─── BASE ───────────────────────────────────────────────────────────────────── */
 
 *,
@@ -193,14 +210,14 @@ body {
   width: 8px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-navy-800);
+  background: #050810;
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-steel-700);
-  border-radius: 4px;
+  background: #1a2030;
+  border-radius: 0;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: var(--color-steel-500);
+  background: #cc1111;
 }
 
 /* ─── TYPOGRAPHY UTILITIES ───────────────────────────────────────────────────── */

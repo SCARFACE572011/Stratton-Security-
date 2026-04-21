@@ -51,8 +51,10 @@ export default function ServicesSection() {
               >
                 <Link
                   href={`/services/${service.slug}`}
-                  className="group flex items-center gap-6 md:gap-10 py-7 border-b border-[#1a2030] hover:border-[#c49a2a]/30 transition-colors"
+                  className="group relative flex items-center gap-6 md:gap-10 py-7 border-b border-[#1a2030] hover:border-[#cc1111]/20 transition-colors overflow-hidden"
                 >
+                  {/* Red left-reveal on hover */}
+                  <span className="absolute left-0 top-0 bottom-0 w-[2px] bg-[#cc1111] scale-y-0 group-hover:scale-y-100 transition-transform duration-300 ease-out origin-bottom" aria-hidden="true" />
                   {/* Number */}
                   <span className="font-[var(--font-display)] text-[0.75rem] text-[#3a4a58] tracking-widest w-8 shrink-0 group-hover:text-[#c49a2a]/60 transition-colors">
                     {String(i + 1).padStart(2, "0")}
