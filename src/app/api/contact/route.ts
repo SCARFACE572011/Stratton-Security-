@@ -1,11 +1,32 @@
 import { NextRequest, NextResponse } from "next/server";
-import { Resend } from "resend";
+
+export const dynamic = "force-dynamic";
 
 const TO = process.env.CONTACT_EMAIL ?? "Info@StrattonSecurityGroup.com";
 
+async function sendEmail(payload: {
+  from: string;
+  to: string;
+  replyTo?: string;
+  subject: string;
+  html: string;
+}) {
+  const res = await fetch("https://api.resend.com/emails", {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${process.env.RESEND_API_KEY}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify(payload),
+  });
+  if (!res.ok) {
+    const err = await res.text();
+    throw new Error(`Resend error: ${err}`);
+  }
+}
+
 export async function POST(req: NextRequest) {
   try {
-    const resend = new Resend(process.env.RESEND_API_KEY);
     const body = await req.json();
     const { propertyType, serviceType, name, company, email, phone, message, hearAbout } = body;
 
@@ -13,7 +34,7 @@ export async function POST(req: NextRequest) {
       return NextResponse.json({ error: "Missing required fields." }, { status: 400 });
     }
 
-    await resend.emails.send({
+    await sendEmail({
       from: "Stratton Security Website <onboarding@resend.dev>",
       to: TO,
       replyTo: email,
@@ -43,8 +64,7 @@ export async function POST(req: NextRequest) {
       `,
     });
 
-    // Confirmation to the submitter
-    await resend.emails.send({
+    await sendEmail({
       from: "Stratton Security Group <onboarding@resend.dev>",
       to: email,
       subject: "We received your inquiry — Stratton Security Group",
