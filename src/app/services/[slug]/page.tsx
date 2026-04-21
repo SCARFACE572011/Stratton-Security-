@@ -1,6 +1,7 @@
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import CTASection from "@/components/home/CTASection";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import {
@@ -78,55 +79,70 @@ export default async function ServiceDetailPage({
         url={`https://strattonsecuritygroup.com/services/${service.slug}`}
       />
       <Navigation />
-      <main className="pt-24">
-        {/* Breadcrumb */}
-        <div className="bg-[#040c1a] border-b border-[#1a3050]">
-          <div className="container-wide py-4">
+      <main>
+        {/* Full-bleed hero */}
+        <div className="page-hero" style={{ minHeight: "55vh" }}>
+          <Image
+            src="https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1920&q=80"
+            alt={service.title}
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050810] via-[#050810]/70 to-[#050810]/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050810]/80 to-transparent" />
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-[#c49a2a]/60 to-transparent" />
+
+          <div className="relative z-10 container-wide pb-16 pt-32 w-full">
             <Link
               href="/services"
-              className="inline-flex items-center gap-2 text-[0.75rem] text-[#4a6880] hover:text-[#c49a2a] uppercase tracking-wide transition-colors"
+              className="inline-flex items-center gap-2 text-[0.75rem] text-[#606878] hover:text-[#c49a2a] uppercase tracking-wide transition-colors mb-8"
             >
               <ArrowLeft size={12} />
               All Services
             </Link>
+            <div className="flex items-center gap-3 mb-5">
+              <div className="w-12 h-12 border border-[#c49a2a]/40 flex items-center justify-center text-[#c49a2a]">
+                <IconComponent size={22} strokeWidth={1.5} />
+              </div>
+              <p className="label-overline">Service Line</p>
+            </div>
+            <h1
+              className="display-title text-white mb-5 max-w-3xl"
+              style={{ fontSize: "clamp(2.5rem, 5.5vw, 4.5rem)" }}
+            >
+              {service.title}
+            </h1>
+            <p className="text-[#a0b0c0] text-[1.0625rem] leading-relaxed max-w-2xl">
+              {service.shortDescription}
+            </p>
           </div>
         </div>
 
-        {/* Hero */}
-        <section className="bg-[#040c1a] border-b border-[#1a3050] py-16 md:py-24">
+        {/* Long description + CTA sidebar */}
+        <section className="section-padding bg-[#050810]">
           <div className="container-wide">
-            <div className="grid lg:grid-cols-12 gap-10 items-start">
+            <div className="section-divider mb-16" />
+            <div className="grid lg:grid-cols-12 gap-12">
               <div className="lg:col-span-8">
-                <div className="flex items-center gap-3 mb-5">
-                  <div className="w-12 h-12 border border-[#c49a2a]/30 flex items-center justify-center text-[#c49a2a]">
-                    <IconComponent size={22} strokeWidth={1.5} />
-                  </div>
-                  <p className="label-overline">Service Line</p>
-                </div>
-                <h1 className="display-title text-[clamp(2.25rem,5vw,3.5rem)] text-[#edf2f7] mb-5 leading-[1.05]">
-                  {service.title}
-                </h1>
-                <p className="text-[#9fb5cb] text-[1.0625rem] leading-relaxed mb-4">
-                  {service.shortDescription}
-                </p>
-                <p className="text-[#7a9ab8] text-[0.9375rem] leading-relaxed">
+                <p className="text-[#a0b0c0] text-[0.9375rem] leading-relaxed">
                   {service.longDescription}
                 </p>
               </div>
               <div className="lg:col-span-4">
-                <div className="border border-[#1a3050] bg-[#06101e] p-6">
+                <div className="border border-[#1a2030] bg-[rgba(255,255,255,0.03)] p-6 sticky top-24">
                   <p className="label-overline mb-3">Get Started</p>
-                  <h3 className="font-[var(--font-display)] text-[1.125rem] text-[#edf2f7] uppercase tracking-wide mb-2">
+                  <h3 className="font-[var(--font-display)] text-[1.125rem] text-white uppercase tracking-wide mb-3">
                     Request A Consultation
                   </h3>
-                  <p className="text-[0.8125rem] text-[#7a9ab8] leading-relaxed mb-5">
-                    Talk with a Stratton security advisor about a tailored program for your property.
+                  <p className="text-[0.8125rem] text-[#606878] leading-relaxed mb-5">
+                    Talk with a Stratton advisor about a tailored program for your property.
                   </p>
                   <Link href="/contact" className="btn-primary w-full justify-center text-xs">
                     Start Your Assessment
                     <ArrowRight size={13} />
                   </Link>
-                  <div className="mt-4 pt-4 border-t border-[#1a3050] text-[0.75rem] text-[#4a6880]">
+                  <div className="mt-4 pt-4 border-t border-[#1a2030] text-[0.75rem] text-[#606878]">
                     Or call us directly
                     <a
                       href={`tel:${SITE_CONFIG.phoneE164}`}
@@ -142,27 +158,28 @@ export default async function ServiceDetailPage({
         </section>
 
         {/* Benefits */}
-        <section className="section-padding bg-[#06101e]">
+        <section className="section-padding bg-[#080c14]">
           <div className="container-wide">
+            <div className="section-divider mb-16" />
             <p className="label-overline mb-4">What You Get</p>
-            <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-10">
+            <h2
+              className="display-title text-white mb-12"
+              style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)" }}
+            >
               Core Program Benefits
             </h2>
-            <div className="grid sm:grid-cols-2 gap-5">
+            <div className="grid sm:grid-cols-2 gap-4">
               {service.benefits.map((benefit) => (
-                <div
-                  key={benefit.title}
-                  className="bg-[#0b1a2e] border border-[#1a3050] p-6 hover:border-[#1e4878] transition-colors"
-                >
+                <div key={benefit.title} className="card-anduril p-6">
                   <div className="flex items-center gap-2.5 mb-3">
-                    <div className="w-5 h-5 rounded-full border border-[#c49a2a]/40 flex items-center justify-center">
+                    <div className="w-5 h-5 border border-[#c49a2a]/40 flex items-center justify-center">
                       <Check size={11} className="text-[#c49a2a]" strokeWidth={2.5} />
                     </div>
-                    <h3 className="font-[var(--font-display)] text-[0.9375rem] text-[#edf2f7] uppercase tracking-wide">
+                    <h3 className="font-[var(--font-display)] text-[0.9375rem] text-white uppercase tracking-wide">
                       {benefit.title}
                     </h3>
                   </div>
-                  <p className="text-[0.875rem] text-[#7a9ab8] leading-relaxed">
+                  <p className="text-[0.875rem] text-[#606878] leading-relaxed">
                     {benefit.description}
                   </p>
                 </div>
@@ -172,29 +189,33 @@ export default async function ServiceDetailPage({
         </section>
 
         {/* Capabilities */}
-        <section className="section-padding bg-[#0b1a2e]">
+        <section className="section-padding bg-[#050810]">
           <div className="container-wide">
+            <div className="section-divider mb-16" />
             <div className="grid lg:grid-cols-12 gap-10 lg:gap-16">
               <div className="lg:col-span-4">
                 <p className="label-overline mb-4">Capabilities</p>
-                <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-5">
+                <h2
+                  className="display-title text-white mb-5"
+                  style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.5rem)" }}
+                >
                   Program
                   <br />
                   <span className="gradient-gold">Components</span>
                 </h2>
-                <p className="text-[#7a9ab8] text-[0.9375rem] leading-relaxed">
+                <p className="text-[#a0b0c0] text-[0.9375rem] leading-relaxed">
                   Stratton programs are modular — combine the components that match
-                  your property's risk profile and operational requirements.
+                  your property&apos;s risk profile and operational requirements.
                 </p>
               </div>
               <div className="lg:col-span-8 grid sm:grid-cols-2 gap-2">
                 {service.capabilities.map((capability) => (
                   <div
                     key={capability}
-                    className="flex items-center gap-3 px-4 py-3 bg-[#06101e] border border-[#1a3050] hover:border-[#1e4878] transition-colors"
+                    className="flex items-center gap-4 px-4 py-3.5 border-b border-[#1a2030] hover:border-[#c49a2a]/30 transition-colors"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#c49a2a] shrink-0" />
-                    <span className="text-[0.8125rem] text-[#9fb5cb]">{capability}</span>
+                    <div className="w-1 h-5 bg-[#c49a2a]/40 shrink-0" />
+                    <span className="text-[0.8125rem] text-[#a0b0c0]">{capability}</span>
                   </div>
                 ))}
               </div>
@@ -204,10 +225,14 @@ export default async function ServiceDetailPage({
 
         {/* Related industries */}
         {relatedIndustries.length > 0 && (
-          <section className="section-padding bg-[#06101e]">
+          <section className="section-padding bg-[#080c14]">
             <div className="container-wide">
+              <div className="section-divider mb-16" />
               <p className="label-overline mb-4">Where It Fits</p>
-              <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-10">
+              <h2
+                className="display-title text-white mb-10"
+                style={{ fontSize: "clamp(1.75rem, 3vw, 2.25rem)" }}
+              >
                 Industries We Serve With This Program
               </h2>
               <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -215,17 +240,15 @@ export default async function ServiceDetailPage({
                   <Link
                     key={industry.slug}
                     href={`/industries/${industry.slug}`}
-                    className="card-dark group block p-5"
+                    className="card-anduril group flex items-center justify-between p-5"
                   >
-                    <div className="flex items-center justify-between">
-                      <h3 className="font-[var(--font-display)] text-[0.9375rem] text-[#edf2f7] uppercase tracking-wide">
-                        {industry.label}
-                      </h3>
-                      <ArrowRight
-                        size={14}
-                        className="text-[#2a3d50] group-hover:text-[#c49a2a] group-hover:translate-x-1 transition-all shrink-0"
-                      />
-                    </div>
+                    <h3 className="font-[var(--font-display)] text-[0.9375rem] text-white uppercase tracking-wide">
+                      {industry.label}
+                    </h3>
+                    <ArrowRight
+                      size={14}
+                      className="text-[#3a4a58] group-hover:text-[#c49a2a] group-hover:translate-x-1 transition-all shrink-0"
+                    />
                   </Link>
                 ))}
               </div>
@@ -234,24 +257,28 @@ export default async function ServiceDetailPage({
         )}
 
         {/* Other services */}
-        <section className="section-padding bg-[#0b1a2e] border-t border-[#1a3050]">
+        <section className="section-padding bg-[#050810]">
           <div className="container-wide">
+            <div className="section-divider mb-16" />
             <p className="label-overline mb-4">Explore More</p>
-            <h2 className="display-title text-[clamp(1.5rem,2.5vw,1.875rem)] text-[#edf2f7] mb-8">
+            <h2
+              className="display-title text-white mb-10"
+              style={{ fontSize: "clamp(1.5rem, 2.5vw, 2rem)" }}
+            >
               Other Service Lines
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-4 gap-4">
               {otherServices.map((s) => {
                 const Icon = ICON_MAP[s.icon as keyof typeof ICON_MAP] ?? Shield;
                 return (
-                  <Link key={s.slug} href={`/services/${s.slug}`} className="card-dark group block p-5">
-                    <div className="w-9 h-9 border border-[#1a3050] flex items-center justify-center mb-4 text-[#c49a2a] group-hover:border-[#c49a2a]/40 transition-colors">
+                  <Link key={s.slug} href={`/services/${s.slug}`} className="card-anduril group block p-5">
+                    <div className="w-9 h-9 border border-[#c49a2a]/20 flex items-center justify-center mb-4 text-[#c49a2a] group-hover:border-[#c49a2a]/50 transition-colors">
                       <Icon size={16} strokeWidth={1.5} />
                     </div>
-                    <h3 className="font-[var(--font-display)] text-[0.875rem] text-[#edf2f7] uppercase tracking-wide mb-2">
+                    <h3 className="font-[var(--font-display)] text-[0.875rem] text-white uppercase tracking-wide mb-2">
                       {s.title}
                     </h3>
-                    <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#4a6880] group-hover:text-[#c49a2a] transition-colors uppercase tracking-wide">
+                    <span className="flex items-center gap-1.5 text-[0.6875rem] text-[#606878] group-hover:text-[#c49a2a] transition-colors uppercase tracking-wide">
                       View
                       <ArrowRight size={11} className="transition-transform group-hover:translate-x-1" />
                     </span>

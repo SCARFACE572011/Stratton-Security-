@@ -1,9 +1,9 @@
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import CTASection from "@/components/home/CTASection";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, Award } from "lucide-react";
-import { SITE_CONFIG } from "@/lib/constants";
 import { BreadcrumbSchema } from "@/app/schema";
 import type { Metadata } from "next";
 
@@ -60,51 +60,65 @@ export default function TrainingPage() {
         { name: "Training", url: "https://strattonsecuritygroup.com/training" },
       ]} />
       <Navigation />
-      <main className="pt-24">
-        <div className="bg-[#040c1a] border-b border-[#1a3050] py-16 md:py-24">
-          <div className="container-wide">
-            <div className="max-w-2xl">
-              <p className="label-overline mb-4">Professional Development</p>
-              <h1 className="display-title text-[clamp(2.5rem,6vw,4rem)] text-[#edf2f7] mb-5">
-                Training &
-                <br />
-                <span className="gradient-gold">Certification Programs</span>
-              </h1>
-              <p className="text-[#7a9ab8] text-[1rem] leading-relaxed">
-                Stratton Security Group offers professional security training workshops
-                for organizations and security personnel across Los Angeles.
-              </p>
-            </div>
+      <main>
+        {/* Full-bleed hero */}
+        <div className="page-hero">
+          <Image
+            src="https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80"
+            alt="Security training and professional development"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050810] via-[#050810]/70 to-[#050810]/20" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050810]/80 to-transparent" />
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-[#c49a2a]/60 to-transparent" />
+
+          <div className="relative z-10 container-wide pb-20 pt-32">
+            <p className="label-overline mb-5">Professional Development</p>
+            <h1
+              className="display-title text-white mb-6 max-w-3xl"
+              style={{ fontSize: "clamp(3rem, 7vw, 5.5rem)" }}
+            >
+              Training &amp;
+              <br />
+              <span className="gradient-gold">Certification Programs</span>
+            </h1>
+            <p className="text-[#a0b0c0] text-[1rem] leading-relaxed max-w-xl">
+              Stratton Security Group offers professional security training workshops
+              for organizations and security personnel across Los Angeles.
+            </p>
           </div>
         </div>
 
         {/* Certifications */}
-        <section className="section-padding bg-[#06101e]">
+        <section className="section-padding bg-[#050810]">
           <div className="container-wide">
+            <div className="section-divider mb-16" />
             <p className="label-overline mb-4">Our Certifications</p>
-            <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-10">
+            <h2
+              className="display-title text-white mb-12"
+              style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)" }}
+            >
               Certified Training Programs
             </h2>
-            <div className="grid sm:grid-cols-2 gap-5">
+            <div className="grid sm:grid-cols-2 gap-4">
               {TRAINING_TOPICS.map((topic, i) => (
-                <div
-                  key={i}
-                  className="bg-[#0b1a2e] border border-[#1a3050] p-6 hover:border-[#1e4878] transition-colors"
-                >
+                <div key={i} className="card-anduril p-6">
                   <div className="flex items-start gap-4 mb-4">
-                    <div className="w-10 h-10 border border-[#c49a2a]/30 flex items-center justify-center shrink-0">
+                    <div className="w-10 h-10 border border-[#c49a2a]/25 flex items-center justify-center shrink-0">
                       <Award size={18} className="text-[#c49a2a]" strokeWidth={1.5} />
                     </div>
                     <div>
-                      <h3 className="font-[var(--font-sans)] text-[0.9375rem] font-600 text-[#edf2f7] mb-0.5">
+                      <h3 className="font-[var(--font-sans)] text-[0.9375rem] font-600 text-white mb-0.5">
                         {topic.title}
                       </h3>
-                      <p className="text-[0.6875rem] text-[#4a6880] tracking-wide uppercase">
+                      <p className="text-[0.6875rem] text-[#606878] tracking-wide uppercase">
                         {topic.sub}
                       </p>
                     </div>
                   </div>
-                  <p className="text-[0.8125rem] text-[#7a9ab8] leading-relaxed">
+                  <p className="text-[0.8125rem] text-[#606878] leading-relaxed">
                     {topic.description}
                   </p>
                 </div>
@@ -114,16 +128,20 @@ export default function TrainingPage() {
         </section>
 
         {/* Workshop areas */}
-        <section className="section-padding bg-[#0b1a2e]">
+        <section className="section-padding bg-[#080c14]">
           <div className="container-wide">
-            <div className="grid lg:grid-cols-2 gap-10">
+            <div className="section-divider mb-16" />
+            <div className="grid lg:grid-cols-2 gap-12">
               <div>
                 <p className="label-overline mb-4">Workshop Curriculum</p>
-                <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-5">
+                <h2
+                  className="display-title text-white mb-6"
+                  style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)" }}
+                >
                   Equipping Your Team
                 </h2>
-                <p className="text-[#7a9ab8] text-[0.9375rem] leading-relaxed mb-6">
-                  Stratton's training workshops are available to external organizations
+                <p className="text-[#a0b0c0] text-[0.9375rem] leading-relaxed mb-8">
+                  Stratton&apos;s training workshops are available to external organizations
                   and businesses seeking to upskill their security teams. Our curriculum
                   is built on real operational experience and California compliance standards.
                 </p>
@@ -132,14 +150,14 @@ export default function TrainingPage() {
                   <ArrowRight size={13} />
                 </Link>
               </div>
-              <div className="grid grid-cols-1 gap-2">
+              <div>
                 {WORKSHOP_AREAS.map((area) => (
                   <div
                     key={area}
-                    className="flex items-center gap-3 px-4 py-3 bg-[#06101e] border border-[#1a3050]"
+                    className="flex items-center gap-4 py-3.5 border-b border-[#1a2030] hover:border-[#c49a2a]/30 transition-colors last:border-0"
                   >
-                    <div className="w-1.5 h-1.5 rounded-full bg-[#c49a2a] shrink-0" />
-                    <span className="text-[0.8125rem] text-[#9fb5cb]">{area}</span>
+                    <div className="w-1 h-5 bg-[#c49a2a]/40 shrink-0" />
+                    <span className="text-[0.8125rem] text-[#a0b0c0]">{area}</span>
                   </div>
                 ))}
               </div>

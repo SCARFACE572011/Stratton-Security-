@@ -1,6 +1,7 @@
 import Navigation from "@/components/layout/Navigation";
 import Footer from "@/components/layout/Footer";
 import CTASection from "@/components/home/CTASection";
+import Image from "next/image";
 import Link from "next/link";
 import { ArrowRight, MapPin } from "lucide-react";
 import { SITE_CONFIG } from "@/lib/constants";
@@ -98,60 +99,72 @@ export default function ServiceAreasPage() {
         { name: "Service Areas", url: "https://strattonsecuritygroup.com/service-areas" },
       ]} />
       <Navigation />
-      <main className="pt-24">
-        {/* Hero */}
-        <div className="bg-[#040c1a] border-b border-[#1a3050] py-16 md:py-24">
-          <div className="container-wide">
-            <div className="max-w-2xl">
-              <p className="label-overline mb-4">Where We Operate</p>
-              <h1 className="display-title text-[clamp(2.5rem,6vw,4rem)] text-[#edf2f7] mb-5">
-                Service Areas
-                <br />
-                <span className="gradient-gold">Los Angeles & Beyond</span>
-              </h1>
-              <p className="text-[#7a9ab8] text-[1rem] leading-relaxed">
-                Stratton Security Group is headquartered in Century City and deploys
-                security programs across Los Angeles, Beverly Hills, and Southern
-                California — from the coast to the San Gabriel Valley, the South Bay
-                to the San Fernando Valley.
-              </p>
-            </div>
+      <main>
+        {/* Full-bleed hero */}
+        <div className="page-hero">
+          <Image
+            src="https://images.unsplash.com/photo-1562701226-f0cfe6d6a68c?auto=format&fit=crop&w=1920&q=80"
+            alt="Los Angeles skyline at night"
+            fill
+            className="object-cover object-center"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#050810] via-[#050810]/65 to-[#050810]/15" />
+          <div className="absolute inset-0 bg-gradient-to-r from-[#050810]/75 to-transparent" />
+          <div className="absolute left-0 top-0 bottom-0 w-0.5 bg-gradient-to-b from-transparent via-[#c49a2a]/60 to-transparent" />
+
+          <div className="relative z-10 container-wide pb-20 pt-32">
+            <p className="label-overline mb-5">Where We Operate</p>
+            <h1
+              className="display-title text-white mb-6 max-w-3xl"
+              style={{ fontSize: "clamp(3rem, 7vw, 5.5rem)" }}
+            >
+              Service Areas
+              <br />
+              <span className="gradient-gold">Los Angeles &amp; Beyond</span>
+            </h1>
+            <p className="text-[#a0b0c0] text-[1rem] leading-relaxed max-w-xl">
+              Stratton Security Group is headquartered in Century City and deploys
+              security programs across Los Angeles, Beverly Hills, and Southern
+              California — from the coast to the San Gabriel Valley.
+            </p>
           </div>
         </div>
 
         {/* Coverage grid */}
-        <section className="section-padding bg-[#06101e]">
+        <section className="section-padding bg-[#050810]">
           <div className="container-wide">
+            <div className="section-divider mb-16" />
             <p className="label-overline mb-4">Primary Coverage</p>
-            <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-10">
+            <h2
+              className="display-title text-white mb-12"
+              style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)" }}
+            >
               Communities We Serve
             </h2>
             <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-4">
               {PRIMARY_AREAS.map((area) => (
-                <div
-                  key={area.name}
-                  className="bg-[#0b1a2e] border border-[#1a3050] p-6 hover:border-[#1e4878] transition-colors group"
-                >
+                <div key={area.name} className="card-anduril p-6">
                   <div className="flex items-center gap-2.5 mb-3">
                     <MapPin size={14} className="text-[#c49a2a] shrink-0" strokeWidth={1.5} />
-                    <h3 className="font-[var(--font-display)] text-[0.9375rem] text-[#edf2f7] uppercase tracking-wide">
+                    <h3 className="font-[var(--font-display)] text-[0.9375rem] text-white uppercase tracking-wide">
                       {area.name}
                     </h3>
                   </div>
-                  <p className="text-[0.8125rem] text-[#7a9ab8] leading-relaxed mb-4">
+                  <p className="text-[0.8125rem] text-[#606878] leading-relaxed mb-4">
                     {area.description}
                   </p>
                   <div className="flex flex-wrap gap-1.5">
                     {area.neighborhoods.slice(0, 4).map((n) => (
                       <span
                         key={n}
-                        className="text-[0.625rem] text-[#4a6880] border border-[#1a3050] px-2 py-0.5 tracking-wide"
+                        className="text-[0.625rem] text-[#606878] border border-[#1a2030] px-2 py-0.5 tracking-wide"
                       >
                         {n}
                       </span>
                     ))}
                     {area.neighborhoods.length > 4 && (
-                      <span className="text-[0.625rem] text-[#4a6880] px-1 py-0.5">
+                      <span className="text-[0.625rem] text-[#3a4a58] px-1 py-0.5">
                         +{area.neighborhoods.length - 4} more
                       </span>
                     )}
@@ -162,39 +175,43 @@ export default function ServiceAreasPage() {
           </div>
         </section>
 
-        {/* Property types + call to action */}
-        <section className="section-padding bg-[#0b1a2e]">
+        {/* Property types + CTA */}
+        <section className="section-padding bg-[#080c14]">
           <div className="container-wide">
-            <div className="grid lg:grid-cols-2 gap-12">
+            <div className="section-divider mb-16" />
+            <div className="grid lg:grid-cols-2 gap-16">
               <div>
                 <p className="label-overline mb-4">Property Types</p>
-                <h2 className="display-title text-[clamp(1.75rem,3.5vw,2.5rem)] text-[#edf2f7] mb-5">
+                <h2
+                  className="display-title text-white mb-6"
+                  style={{ fontSize: "clamp(1.75rem, 3.5vw, 2.75rem)" }}
+                >
                   Every Property
                   <br />
                   <span className="gradient-gold">In Our Coverage Area</span>
                 </h2>
-                <p className="text-[#7a9ab8] text-[0.9375rem] leading-relaxed mb-6">
+                <p className="text-[#a0b0c0] text-[0.9375rem] leading-relaxed mb-8">
                   Within our service areas, Stratton deploys programs for every
                   major property type — from commercial real estate and luxury
                   estates to construction sites and transit hubs.
                 </p>
-                <div className="space-y-2">
+                <div>
                   {PROPERTY_TYPES_SERVED.map((type) => (
-                    <div key={type} className="flex items-center gap-3 py-2.5 border-b border-[#1a3050] last:border-0">
-                      <div className="w-1.5 h-1.5 rounded-full bg-[#c49a2a] shrink-0" />
-                      <span className="text-[0.875rem] text-[#9fb5cb]">{type}</span>
+                    <div key={type} className="flex items-center gap-4 py-3 border-b border-[#1a2030] last:border-0">
+                      <div className="w-1 h-5 bg-[#c49a2a]/40 shrink-0" />
+                      <span className="text-[0.875rem] text-[#a0b0c0]">{type}</span>
                     </div>
                   ))}
                 </div>
               </div>
 
               <div className="space-y-5">
-                <div className="bg-[#06101e] border border-[#1a3050] p-6">
+                <div className="card-anduril p-6">
                   <p className="label-overline mb-3">Outside Our Primary Areas?</p>
-                  <h3 className="font-[var(--font-display)] text-[1.125rem] text-[#edf2f7] uppercase tracking-wide mb-3">
+                  <h3 className="font-[var(--font-display)] text-[1.125rem] text-white uppercase tracking-wide mb-3">
                     Contact Us First
                   </h3>
-                  <p className="text-[0.875rem] text-[#7a9ab8] leading-relaxed mb-5">
+                  <p className="text-[0.875rem] text-[#606878] leading-relaxed mb-6">
                     Stratton is actively expanding coverage. If your property is
                     outside our listed service areas, contact us — we may still
                     be able to serve you, or connect you with a vetted partner.
@@ -205,19 +222,19 @@ export default function ServiceAreasPage() {
                   </Link>
                 </div>
 
-                <div className="bg-[#06101e] border border-[#1a3050] p-6">
+                <div className="card-anduril p-6">
                   <p className="label-overline mb-3">Our Headquarters</p>
                   <address className="not-italic">
-                    <p className="text-[#edf2f7] text-[0.9375rem] font-medium mb-1">
+                    <p className="text-white text-[0.9375rem] font-medium mb-1">
                       {SITE_CONFIG.name}
                     </p>
-                    <p className="text-[0.875rem] text-[#9fb5cb]">
+                    <p className="text-[0.875rem] text-[#a0b0c0]">
                       {SITE_CONFIG.address}
                     </p>
-                    <p className="text-[0.875rem] text-[#9fb5cb]">
+                    <p className="text-[0.875rem] text-[#a0b0c0]">
                       {SITE_CONFIG.city}, {SITE_CONFIG.state} {SITE_CONFIG.zip}
                     </p>
-                    <p className="text-[0.75rem] text-[#4a6880] mt-1">
+                    <p className="text-[0.75rem] text-[#606878] mt-1">
                       Century City, Los Angeles
                     </p>
                   </address>

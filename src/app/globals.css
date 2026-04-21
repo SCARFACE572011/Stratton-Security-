@@ -59,12 +59,16 @@
   --color-text-600: #4a6880;
   --color-text-800: #2a3d50;
 
+  /* Anduril-inspired pure black tokens */
+  --color-anduril-black: #050810;
+  --color-anduril-surface: #0a0f1a;
+
   /* Semantic tokens */
-  --color-background: var(--color-navy-900);
-  --color-surface: var(--color-navy-800);
+  --color-background: #050810;
+  --color-surface: #0a0f1a;
   --color-surface-raised: var(--color-navy-700);
-  --color-border: #1a3050;
-  --color-border-emphasis: #1e4878;
+  --color-border: #1a2030;
+  --color-border-emphasis: #1e3050;
 
   /* Spacing scale (extends Tailwind default) */
   --spacing-18: 4.5rem;
@@ -152,7 +156,7 @@ html {
 }
 
 body {
-  background-color: var(--color-navy-900);
+  background-color: #050810;
   color: var(--color-text-100);
   font-family: var(--font-sans);
   line-height: 1.6;
@@ -445,4 +449,33 @@ body {
 @utility card-3d-wrapper {
   perspective: 1000px;
   transform-style: preserve-3d;
+}
+
+/* ─── ANDURIL FULL-BLEED HERO ────────────────────────────────────────────────── */
+
+@utility page-hero {
+  position: relative;
+  min-height: 65vh;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+}
+
+/* ─── SECTION DIVIDER ────────────────────────────────────────────────────────── */
+
+@utility section-divider {
+  height: 1px;
+  background: rgba(196, 154, 42, 0.18);
+}
+
+/* ─── ANDURIL CARD ───────────────────────────────────────────────────────────── */
+
+@utility card-anduril {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid #1a2030;
+  transition: border-color 0.2s ease;
+
+  &:hover {
+    border-color: rgba(196, 154, 42, 0.4);
+  }
 }
