@@ -8,7 +8,7 @@ import { motion, useReducedMotion, useScroll, useTransform } from "framer-motion
 import { SITE_CONFIG } from "@/lib/constants";
 
 const HERO_BG =
-  "https://images.unsplash.com/photo-1526374965328-7f61d4dc18c5?auto=format&fit=crop&w=1920&q=80";
+  "https://images.unsplash.com/photo-1486325212027-8081e485255e?auto=format&fit=crop&w=1920&q=80";
 
 export default function HeroSection() {
   const prefersReduced = useReducedMotion();
