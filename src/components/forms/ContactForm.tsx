@@ -1,21 +1,25 @@
 "use client";
 
 import { useState } from "react";
+import { useForm } from "react-hook-form";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { z } from "zod";
 import { ArrowRight, CheckCircle, Phone, Loader2 } from "lucide-react";
 import { SITE_CONFIG, SERVICES } from "@/lib/constants";
 
-type FormStep = 1 | 2 | 3;
+const schema = z.object({
+  propertyType: z.string().min(1, "Please select a property type."),
+  serviceType: z.string().min(1, "Please select a service."),
+  name: z.string().min(1, "Name is required."),
+  company: z.string().optional(),
+  email: z.string().min(1, "Email is required.").email("Please enter a valid email address."),
+  phone: z.string().min(1, "Phone number is required."),
+  message: z.string().optional(),
+  hearAbout: z.string().optional(),
+});
 
-interface FormData {
-  propertyType: string;
-  serviceType: string;
-  name: string;
-  company: string;
-  phone: string;
-  email: string;
-  message: string;
-  hearAbout: string;
-}
+type FormData = z.infer<typeof schema>;
+type FormStep = 1 | 2 | 3;
 
 const PROPERTY_TYPES = [
   "Commercial Property",
@@ -29,91 +33,69 @@ const PROPERTY_TYPES = [
   "Other",
 ];
 
+const STEP_LABELS = ["Property & Service", "Your Information", "Details & Submit"];
+
+const inputClass =
+  "w-full bg-[#050810] border border-[#1a2030] text-white text-sm px-4 py-3 focus:border-[#c49a2a]/50 focus:outline-none transition-colors placeholder:text-[#3a4a58]";
+const labelClass =
+  "block text-[0.75rem] text-[#606878] tracking-widest uppercase mb-2";
+const errorClass =
+  "text-[0.75rem] text-[#ef4444] mt-1.5";
+
 export default function ContactForm() {
   const [step, setStep] = useState<FormStep>(1);
   const [submitted, setSubmitted] = useState(false);
-  const [submitting, setSubmitting] = useState(false);
   const [submitError, setSubmitError] = useState("");
-  const [errors, setErrors] = useState<Partial<FormData>>({});
-  const [formData, setFormData] = useState<FormData>({
-    propertyType: "",
-    serviceType: "",
-    name: "",
-    company: "",
-    phone: "",
-    email: "",
-    message: "",
-    hearAbout: "",
-  });
 
-  const update = (field: keyof FormData, value: string) => {
-    setFormData((prev) => ({ ...prev, [field]: value }));
-    setErrors((prev) => ({ ...prev, [field]: undefined }));
+  const {
+    register,
+    handleSubmit,
+    trigger,
+    getValues,
+    formState: { errors, isSubmitting },
+  } = useForm<FormData>({ resolver: zodResolver(schema) });
+
+  const advanceStep = async () => {
+    const stepFields: Record<FormStep, (keyof FormData)[]> = {
+      1: ["propertyType", "serviceType"],
+      2: ["name", "email", "phone"],
+      3: [],
+    };
+    const valid = await trigger(stepFields[step]);
+    if (valid) setStep((s) => (s + 1) as FormStep);
   };
 
-  const validateStep1 = () => {
-    const newErrors: Partial<FormData> = {};
-    if (!formData.propertyType) newErrors.propertyType = "Please select a property type.";
-    if (!formData.serviceType) newErrors.serviceType = "Please select a service.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const validateStep2 = () => {
-    const newErrors: Partial<FormData> = {};
-    if (!formData.name.trim()) newErrors.name = "Name is required.";
-    if (!formData.email.trim()) newErrors.email = "Email is required.";
-    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(formData.email))
-      newErrors.email = "Please enter a valid email address.";
-    if (!formData.phone.trim()) newErrors.phone = "Phone number is required.";
-    setErrors(newErrors);
-    return Object.keys(newErrors).length === 0;
-  };
-
-  const handleNext = () => {
-    if (step === 1 && validateStep1()) setStep(2);
-    else if (step === 2 && validateStep2()) setStep(3);
-  };
-
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (step !== 3) return;
-    setSubmitting(true);
+  const onSubmit = async (data: FormData) => {
     setSubmitError("");
-
     try {
       const res = await fetch("/api/contact", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(formData),
+        body: JSON.stringify(data),
       });
-      const data = await res.json();
-      if (!res.ok) throw new Error(data.error ?? "Submission failed.");
+      const json = await res.json();
+      if (!res.ok) throw new Error(json.error ?? "Submission failed.");
       setSubmitted(true);
     } catch (err) {
       setSubmitError(err instanceof Error ? err.message : "Something went wrong. Please try again.");
-    } finally {
-      setSubmitting(false);
     }
   };
 
-  const STEP_LABELS = ["Property & Service", "Your Information", "Details & Submit"];
-
   if (submitted) {
+    const name = getValues("name");
     return (
-      <div className="bg-[#0b1a2e] border border-[#1a3050] p-8 md:p-12 text-center">
+      <div className="card-anduril p-8 md:p-12 text-center">
         <div className="w-14 h-14 border border-[#10b981]/40 flex items-center justify-center mx-auto mb-5">
           <CheckCircle size={26} className="text-[#10b981]" />
         </div>
-        <h3 className="font-[var(--font-display)] text-2xl text-[#edf2f7] uppercase tracking-wide mb-3">
+        <h3 className="font-[var(--font-display)] text-2xl text-white uppercase tracking-wide mb-3">
           Request Received
         </h3>
-        <p className="text-[#7a9ab8] text-[0.9375rem] max-w-sm mx-auto mb-8 leading-relaxed">
-          Thank you, {formData.name}. A Stratton security advisor will contact
-          you within one business day to discuss your needs.
+        <p className="text-[#a0b0c0] text-[0.9375rem] max-w-sm mx-auto mb-8 leading-relaxed">
+          Thank you, {name}. A Stratton security advisor will contact you within one business day to discuss your needs.
         </p>
-        <div className="border-t border-[#1a3050] pt-6">
-          <p className="text-[0.75rem] text-[#4a6880] mb-3">For immediate assistance:</p>
+        <div className="border-t border-[#1a2030] pt-6">
+          <p className="text-[0.75rem] text-[#606878] mb-3">For immediate assistance:</p>
           <a
             href={`tel:${SITE_CONFIG.phoneE164}`}
             className="inline-flex items-center gap-2 text-[#c49a2a] font-medium text-sm hover:text-[#e0b84a] transition-colors"
@@ -126,37 +108,27 @@ export default function ContactForm() {
     );
   }
 
+  const values = getValues();
+
   return (
-    <div className="bg-[#0b1a2e] border border-[#1a3050]">
-      {/* Progress bar */}
-      <div className="border-b border-[#1a3050]">
+    <div className="card-anduril">
+      {/* Step progress */}
+      <div className="border-b border-[#1a2030]">
         <div className="flex">
           {STEP_LABELS.map((label, i) => {
             const stepNum = (i + 1) as FormStep;
             const isActive = step === stepNum;
             const isComplete = step > stepNum;
-
             return (
-              <div
-                key={i}
-                className="flex-1 px-4 py-3 relative"
-              >
+              <div key={i} className="flex-1 px-4 py-3 relative">
                 <div
                   className={`absolute bottom-0 left-0 right-0 h-0.5 transition-colors duration-300 ${
-                    isActive
-                      ? "bg-[#c49a2a]"
-                      : isComplete
-                      ? "bg-[#c49a2a]/40"
-                      : "bg-transparent"
+                    isActive ? "bg-[#c49a2a]" : isComplete ? "bg-[#c49a2a]/40" : "bg-transparent"
                   }`}
                 />
                 <span
                   className={`text-[0.6875rem] tracking-widest uppercase transition-colors ${
-                    isActive
-                      ? "text-[#c49a2a]"
-                      : isComplete
-                      ? "text-[#4a6880]"
-                      : "text-[#2a3d50]"
+                    isActive ? "text-[#c49a2a]" : isComplete ? "text-[#606878]" : "text-[#3a4a58]"
                   }`}
                 >
                   {i + 1}. {label}
@@ -167,215 +139,150 @@ export default function ContactForm() {
         </div>
       </div>
 
-      <form onSubmit={handleSubmit} noValidate>
+      <form onSubmit={handleSubmit(onSubmit)} noValidate>
         <div className="p-6 md:p-8">
-          {/* ── Step 1: Property & Service ── */}
+          {/* Step 1 */}
           {step === 1 && (
             <div className="space-y-5">
               <div>
-                <label
-                  htmlFor="propertyType"
-                  className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                >
+                <label htmlFor="propertyType" className={labelClass}>
                   Property Type <span className="text-[#c49a2a]">*</span>
                 </label>
                 <select
                   id="propertyType"
-                  value={formData.propertyType}
-                  onChange={(e) => update("propertyType", e.target.value)}
-                  className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 focus:border-[#c49a2a]/50 focus:outline-none transition-colors appearance-none cursor-pointer"
-                  aria-describedby={errors.propertyType ? "propertyType-error" : undefined}
+                  {...register("propertyType")}
+                  className={`${inputClass} appearance-none cursor-pointer`}
                   aria-invalid={!!errors.propertyType}
                 >
-                  <option value="" disabled>Select property type...</option>
-                  {PROPERTY_TYPES.map((type) => (
-                    <option key={type} value={type}>{type}</option>
+                  <option value="">Select property type...</option>
+                  {PROPERTY_TYPES.map((t) => (
+                    <option key={t} value={t}>{t}</option>
                   ))}
                 </select>
                 {errors.propertyType && (
-                  <p id="propertyType-error" className="text-[0.75rem] text-[#ef4444] mt-1.5" role="alert">
-                    {errors.propertyType}
-                  </p>
+                  <p className={errorClass} role="alert">{errors.propertyType.message}</p>
                 )}
               </div>
-
               <div>
-                <label
-                  htmlFor="serviceType"
-                  className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                >
+                <label htmlFor="serviceType" className={labelClass}>
                   Service Needed <span className="text-[#c49a2a]">*</span>
                 </label>
                 <select
                   id="serviceType"
-                  value={formData.serviceType}
-                  onChange={(e) => update("serviceType", e.target.value)}
-                  className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 focus:border-[#c49a2a]/50 focus:outline-none transition-colors appearance-none cursor-pointer"
-                  aria-describedby={errors.serviceType ? "serviceType-error" : undefined}
+                  {...register("serviceType")}
+                  className={`${inputClass} appearance-none cursor-pointer`}
                   aria-invalid={!!errors.serviceType}
                 >
-                  <option value="" disabled>Select a service...</option>
+                  <option value="">Select a service...</option>
                   {SERVICES.map((s) => (
                     <option key={s.id} value={s.title}>{s.title}</option>
                   ))}
                   <option value="Not sure — need consultation">Not sure — need consultation</option>
                 </select>
                 {errors.serviceType && (
-                  <p id="serviceType-error" className="text-[0.75rem] text-[#ef4444] mt-1.5" role="alert">
-                    {errors.serviceType}
-                  </p>
+                  <p className={errorClass} role="alert">{errors.serviceType.message}</p>
                 )}
               </div>
             </div>
           )}
 
-          {/* ── Step 2: Contact Info ── */}
+          {/* Step 2 */}
           {step === 2 && (
             <div className="space-y-5">
               <div className="grid sm:grid-cols-2 gap-4">
                 <div>
-                  <label
-                    htmlFor="name"
-                    className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                  >
+                  <label htmlFor="name" className={labelClass}>
                     Full Name <span className="text-[#c49a2a]">*</span>
                   </label>
                   <input
                     id="name"
                     type="text"
-                    value={formData.name}
-                    onChange={(e) => update("name", e.target.value)}
+                    {...register("name")}
                     placeholder="John Smith"
                     autoComplete="name"
-                    className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 placeholder-[#2a3d50] focus:border-[#c49a2a]/50 focus:outline-none transition-colors"
-                    aria-describedby={errors.name ? "name-error" : undefined}
+                    className={inputClass}
                     aria-invalid={!!errors.name}
                   />
-                  {errors.name && (
-                    <p id="name-error" className="text-[0.75rem] text-[#ef4444] mt-1.5" role="alert">
-                      {errors.name}
-                    </p>
-                  )}
+                  {errors.name && <p className={errorClass} role="alert">{errors.name.message}</p>}
                 </div>
                 <div>
-                  <label
-                    htmlFor="company"
-                    className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                  >
-                    Company / Property
-                  </label>
+                  <label htmlFor="company" className={labelClass}>Company / Property</label>
                   <input
                     id="company"
                     type="text"
-                    value={formData.company}
-                    onChange={(e) => update("company", e.target.value)}
+                    {...register("company")}
                     placeholder="Company name (optional)"
                     autoComplete="organization"
-                    className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 placeholder-[#2a3d50] focus:border-[#c49a2a]/50 focus:outline-none transition-colors"
+                    className={inputClass}
                   />
                 </div>
               </div>
-
               <div>
-                <label
-                  htmlFor="email"
-                  className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                >
+                <label htmlFor="email" className={labelClass}>
                   Email Address <span className="text-[#c49a2a]">*</span>
                 </label>
                 <input
                   id="email"
                   type="email"
-                  value={formData.email}
-                  onChange={(e) => update("email", e.target.value)}
+                  {...register("email")}
                   placeholder="you@company.com"
                   autoComplete="email"
-                  className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 placeholder-[#2a3d50] focus:border-[#c49a2a]/50 focus:outline-none transition-colors"
-                  aria-describedby={errors.email ? "email-error" : undefined}
+                  className={inputClass}
                   aria-invalid={!!errors.email}
                 />
-                {errors.email && (
-                  <p id="email-error" className="text-[0.75rem] text-[#ef4444] mt-1.5" role="alert">
-                    {errors.email}
-                  </p>
-                )}
+                {errors.email && <p className={errorClass} role="alert">{errors.email.message}</p>}
               </div>
-
               <div>
-                <label
-                  htmlFor="phone"
-                  className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                >
+                <label htmlFor="phone" className={labelClass}>
                   Phone Number <span className="text-[#c49a2a]">*</span>
                 </label>
                 <input
                   id="phone"
                   type="tel"
-                  value={formData.phone}
-                  onChange={(e) => update("phone", e.target.value)}
+                  {...register("phone")}
                   placeholder="(xxx) xxx-xxxx"
                   autoComplete="tel"
-                  className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 placeholder-[#2a3d50] focus:border-[#c49a2a]/50 focus:outline-none transition-colors"
-                  aria-describedby={errors.phone ? "phone-error" : undefined}
+                  className={inputClass}
                   aria-invalid={!!errors.phone}
                 />
-                {errors.phone && (
-                  <p id="phone-error" className="text-[0.75rem] text-[#ef4444] mt-1.5" role="alert">
-                    {errors.phone}
-                  </p>
-                )}
+                {errors.phone && <p className={errorClass} role="alert">{errors.phone.message}</p>}
               </div>
             </div>
           )}
 
-          {/* ── Step 3: Message ── */}
+          {/* Step 3 */}
           {step === 3 && (
             <div className="space-y-5">
-              {/* Summary */}
-              <div className="bg-[#06101e] border border-[#1a3050] p-4 text-[0.8125rem] text-[#7a9ab8]">
+              <div className="bg-[#050810] border border-[#1a2030] p-4 text-[0.8125rem]">
                 <p>
-                  <span className="text-[#4a6880] uppercase tracking-wide text-[0.6875rem]">Property: </span>
-                  <span className="text-[#b8cce0]">{formData.propertyType}</span>
+                  <span className="text-[#606878] uppercase tracking-wide text-[0.6875rem]">Property: </span>
+                  <span className="text-[#a0b0c0]">{values.propertyType}</span>
                 </p>
                 <p className="mt-1">
-                  <span className="text-[#4a6880] uppercase tracking-wide text-[0.6875rem]">Service: </span>
-                  <span className="text-[#b8cce0]">{formData.serviceType}</span>
+                  <span className="text-[#606878] uppercase tracking-wide text-[0.6875rem]">Service: </span>
+                  <span className="text-[#a0b0c0]">{values.serviceType}</span>
                 </p>
                 <p className="mt-1">
-                  <span className="text-[#4a6880] uppercase tracking-wide text-[0.6875rem]">Contact: </span>
-                  <span className="text-[#b8cce0]">{formData.name} — {formData.email}</span>
+                  <span className="text-[#606878] uppercase tracking-wide text-[0.6875rem]">Contact: </span>
+                  <span className="text-[#a0b0c0]">{values.name} — {values.email}</span>
                 </p>
               </div>
-
               <div>
-                <label
-                  htmlFor="message"
-                  className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                >
-                  Additional Details
-                </label>
+                <label htmlFor="message" className={labelClass}>Additional Details</label>
                 <textarea
                   id="message"
-                  value={formData.message}
-                  onChange={(e) => update("message", e.target.value)}
+                  {...register("message")}
                   rows={4}
-                  placeholder="Describe your property, number of locations, current security concerns, or any other relevant details..."
-                  className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 placeholder-[#2a3d50] focus:border-[#c49a2a]/50 focus:outline-none transition-colors resize-none"
+                  placeholder="Describe your property, number of locations, current security concerns..."
+                  className={`${inputClass} resize-none`}
                 />
               </div>
-
               <div>
-                <label
-                  htmlFor="hearAbout"
-                  className="block text-[0.75rem] text-[#7a9ab8] tracking-widest uppercase mb-2"
-                >
-                  How Did You Hear About Us?
-                </label>
+                <label htmlFor="hearAbout" className={labelClass}>How Did You Hear About Us?</label>
                 <select
                   id="hearAbout"
-                  value={formData.hearAbout}
-                  onChange={(e) => update("hearAbout", e.target.value)}
-                  className="w-full bg-[#06101e] border border-[#1a3050] text-[#edf2f7] text-sm px-4 py-3 focus:border-[#c49a2a]/50 focus:outline-none transition-colors appearance-none cursor-pointer"
+                  {...register("hearAbout")}
+                  className={`${inputClass} appearance-none cursor-pointer`}
                 >
                   <option value="">Select one...</option>
                   <option>Google Search</option>
@@ -386,26 +293,23 @@ export default function ContactForm() {
                   <option>Other</option>
                 </select>
               </div>
-
-              <p className="text-[0.6875rem] text-[#2a3d50] leading-relaxed">
-                Your information is kept confidential and will only be used to contact you
-                regarding your security inquiry. We do not share client information with
-                third parties.
+              <p className="text-[0.6875rem] text-[#3a4a58] leading-relaxed">
+                Your information is kept confidential and will only be used to contact you regarding your security inquiry. We do not share client information with third parties.
               </p>
             </div>
           )}
         </div>
 
-        {/* Form navigation */}
         {submitError && (
           <p className="mx-6 md:mx-8 mb-2 text-[0.75rem] text-[#ef4444]" role="alert">{submitError}</p>
         )}
+
         <div className="px-6 md:px-8 pb-6 md:pb-8 flex items-center justify-between gap-4">
           {step > 1 ? (
             <button
               type="button"
               onClick={() => setStep((s) => (s - 1) as FormStep)}
-              className="text-[0.8125rem] text-[#7a9ab8] hover:text-[#b8cce0] transition-colors uppercase tracking-wide"
+              className="text-[0.8125rem] text-[#a0b0c0] hover:text-white transition-colors uppercase tracking-wide"
             >
               ← Back
             </button>
@@ -414,21 +318,17 @@ export default function ContactForm() {
           )}
 
           {step < 3 ? (
-            <button
-              type="button"
-              onClick={handleNext}
-              className="btn-primary text-xs"
-            >
+            <button type="button" onClick={advanceStep} className="btn-primary text-xs">
               Continue
               <ArrowRight size={13} />
             </button>
           ) : (
             <button
               type="submit"
-              disabled={submitting}
+              disabled={isSubmitting}
               className="btn-primary text-xs disabled:opacity-70 disabled:cursor-not-allowed"
             >
-              {submitting ? (
+              {isSubmitting ? (
                 <>
                   <Loader2 size={14} className="animate-spin" />
                   Sending...

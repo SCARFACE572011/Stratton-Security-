@@ -4,6 +4,8 @@ import "./globals.css";
 import { OrganizationSchema } from "./schema";
 import MobileStickyBar from "@/components/layout/MobileStickyBar";
 import BackToTop from "@/components/layout/BackToTop";
+import LenisProvider from "@/components/layout/LenisProvider";
+import { Analytics } from "@vercel/analytics/react";
 
 const barlowSemiCondensed = Barlow_Semi_Condensed({
   weight: ["600", "700", "800"],
@@ -90,10 +92,13 @@ export default function RootLayout({
       className={`${barlowSemiCondensed.variable} ${barlowReg.variable} ${ibmPlexSans.variable}`}
     >
       <body className="min-h-screen flex flex-col antialiased">
-        <OrganizationSchema />
-        {children}
-        <MobileStickyBar />
-        <BackToTop />
+        <LenisProvider>
+          <OrganizationSchema />
+          {children}
+          <MobileStickyBar />
+          <BackToTop />
+          <Analytics />
+        </LenisProvider>
       </body>
     </html>
   );
